@@ -1,0 +1,31 @@
+{
+  "name": "@dappa/404-missing",
+  "version": "0.1.0",
+  "description": "Current missing-child appeals for 404 pages. Self-hosted API, web component, Vue, React and MCP setup tools.",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "repository": { "type": "git", "url": "https://github.com/dilrajahdan/404-missing.git" },
+  "files": ["dist", "vue", "README.md", "LICENSE", "SECURITY.md", "docs/providers.md"],
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./server": { "types": "./dist/server.d.ts", "default": "./dist/server.js" },
+    "./node": { "types": "./dist/node.d.ts", "default": "./dist/node.js" },
+    "./netlify": { "types": "./dist/netlify.d.ts", "default": "./dist/netlify.js" },
+    "./widget": { "types": "./dist/widget.d.ts", "default": "./dist/widget.js" },
+    "./vue": "./vue/MissingChild.vue",
+    "./react": { "types": "./dist/react.d.ts", "default": "./dist/react.js" }
+  },
+  "bin": { "404-missing-mcp": "dist/mcp.js" },
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "demo": "node examples/server.mjs",
+    "prepack": "npm run build",
+    "check:secrets": "node scripts/check-secrets.mjs"
+  },
+  "dependencies": { "@modelcontextprotocol/sdk": "^1.31.0", "zod": "^4.3.6" },
+  "peerDependencies": { "vue": "^3.5.0", "react": "^18.0.0 || ^19.0.0" },
+  "peerDependenciesMeta": { "vue": { "optional": true }, "react": { "optional": true } },
+  "devDependencies": { "@types/node": "^22.0.0", "@types/react": "^19.0.0", "typescript": "~5.9.3", "happy-dom": "^20.9.0", "react": "^19.0.0", "react-dom": "^19.0.0", "vue": "^3.5.0" }
+}
