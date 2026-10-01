@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { spawnSync } from 'node:child_process'
-import { dirname, join } from 'node:path'
+import { join } from 'node:path'
 import QRCode from 'qrcode'
 
 const root = new URL('..', import.meta.url).pathname
@@ -14,8 +14,6 @@ const captions = join(assetDir, '404-missing-ugc-psa.vtt')
 const finalVideo = join(assetDir, '404-missing-ugc-psa.mp4')
 const poster = join(assetDir, '404-missing-ugc-psa-poster.jpg')
 const contactSheet = join(workDir, '404-missing-ugc-psa-contact-sheet.jpg')
-const storyVideo = join(workDir, 'story.mp4')
-const endCard = join(workDir, 'end-card.mp4')
 const storyOverlaySvg = join(workDir, 'story-overlay.svg')
 const storyOverlayPng = join(workDir, 'story-overlay.png')
 const endCardSvg = join(workDir, 'end-card.svg')
@@ -75,6 +73,7 @@ await writeFile(storyOverlaySvg, `<?xml version="1.0" encoding="UTF-8"?>
   <rect x="0" y="0" width="720" height="112" fill="#000000" opacity="0.34"/>
   <rect x="30" y="27" width="240" height="64" rx="18" fill="#000000" opacity="0.24"/>
   <text x="50" y="70" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800" fill="#ffffff">404 Missing</text>
+  <text x="670" y="68" text-anchor="end" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#ffffff">Fictional dramatisation</text>
   <rect x="30" y="1110" width="660" height="92" rx="24" fill="#000000" opacity="0.56"/>
   <text x="52" y="1169" font-family="Arial, Helvetica, sans-serif" font-size="39" font-weight="850" fill="#ffffff">${escDrawtext(strapline)}</text>
 </svg>
@@ -107,129 +106,45 @@ await writeFile(endCardSvg, `<?xml version="1.0" encoding="UTF-8"?>
 `)
 run('rsvg-convert', ['-w', '720', '-h', '1280', '-o', endCardPng, endCardSvg])
 
-await writeFile(captions, `WEBVTT
+// Generate verbatim captions from the TTS alignment, rather than estimated timings.
+const narration = JSON.parse(await readFile(join(assetDir, '404-missing-ugc-psa-narration.json'), 'utf8'))
+const { characters, character_start_times_seconds: starts, character_end_times_seconds: ends } = narration.alignment
+function timestamp(seconds) {
+  const ms = Math.round(seconds * 1000)
+  return `${String(Math.floor(ms / 3600000)).padStart(2, '0')}:${String(Math.floor(ms / 60000) % 60).padStart(2, '0')}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')}.${String(ms % 1000).padStart(3, '0')}`
+}
+const cues = []
+let first = 0
+for (let i = 0; i < characters.length; i++) {
+  if ((/[.!?]/.test(characters[i]) && !/[.!?]/.test(characters[i + 1] || '')) || i === characters.length - 1) {
+    while (first < i && /\s/.test(characters[first])) first++
+    cues.push(`${timestamp(starts[first])} --> ${timestamp(ends[i])}\n${characters.slice(first, i + 1).join('')}`)
+    first = i + 1
+  }
+}
+await writeFile(captions, `WEBVTT\n\n${cues.join('\n\n')}\n`)
 
-00:00.000 --> 00:03.800
-Every site has dead links.
-
-00:03.800 --> 00:08.000
-What if one could help bring a child home?
-
-00:08.000 --> 00:14.400
-With 404 Missing, your 404 page can show an official local missing-child appeal.
-
-00:14.400 --> 00:19.200
-Your API keeps provider keys private.
-
-00:19.200 --> 00:24.980
-A visitor recognises something, calls police, and one page matters.
-
-00:24.980 --> 00:30.000
-${strapline}
-${githubUrl}
-`)
-
-const audioDuration = Math.min(25, Math.max(20, duration(voiceover)))
-const storyFilter = [
-  `[0:v]trim=0:${audioDuration.toFixed(3)},setpts=PTS-STARTPTS,scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,setsar=1,format=yuv420p[v0]`,
-  `[2:v]format=rgba[ov]`,
-  `[v0][ov]overlay=0:0[v]`,
-  `[1:a]atrim=0:${audioDuration.toFixed(3)},asetpts=PTS-STARTPTS,loudnorm=I=-16:TP=-1.5:LRA=11[a]`,
-].join(';')
-
+const storyDuration = 25
+const totalDuration = Math.max(32, duration(voiceover) + 1.5)
+const endDuration = totalDuration - storyDuration
+// Keep narration continuous across the story and final card. Never truncate speech.
 run('ffmpeg', [
-  '-y',
-  '-hide_banner',
-  '-loglevel',
-  'warning',
-  '-i',
-  rawVideo,
-  '-i',
-  voiceover,
-  '-i',
-  storyOverlayPng,
-  '-filter_complex',
-  storyFilter,
-  '-map',
-  '[v]',
-  '-map',
-  '[a]',
-  '-c:v',
-  'libx264',
-  '-crf',
-  '22',
-  '-c:a',
-  'aac',
-  '-b:a',
-  '128k',
-  '-movflags',
-  '+faststart',
-  storyVideo,
+  '-y', '-hide_banner', '-loglevel', 'warning',
+  '-i', rawVideo, '-i', storyOverlayPng,
+  '-loop', '1', '-framerate', '24', '-i', endCardPng,
+  '-i', voiceover,
+  '-filter_complex', [
+    `[0:v]trim=duration=${storyDuration},setpts=PTS-STARTPTS,scale=720:1280:force_original_aspect_ratio=increase,crop=720:1280,setsar=1,fps=24[story]`,
+    '[story][1:v]overlay=0:0,format=yuv420p[v0]',
+    `[2:v]trim=duration=${endDuration},setpts=PTS-STARTPTS,setsar=1,format=yuv420p[v1]`,
+    '[v0][v1]concat=n=2:v=1:a=0[v]',
+    `[3:a]loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000,afade=t=in:d=0.03,apad,atrim=duration=${totalDuration}[a]`,
+  ].join(';'),
+  '-map', '[v]', '-map', '[a]', '-t', String(totalDuration),
+  '-c:v', 'libx264', '-crf', '22', '-pix_fmt', 'yuv420p',
+  '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', finalVideo,
 ])
 
-run('ffmpeg', [
-  '-y',
-  '-hide_banner',
-  '-loglevel',
-  'warning',
-  '-loop',
-  '1',
-  '-i',
-  endCardPng,
-  '-f',
-  'lavfi',
-  '-i',
-  'anullsrc=channel_layout=stereo:sample_rate=44100',
-  '-t',
-  '5',
-  '-c:v',
-  'libx264',
-  '-crf',
-  '20',
-  '-c:a',
-  'aac',
-  '-b:a',
-  '128k',
-  '-pix_fmt',
-  'yuv420p',
-  '-movflags',
-  '+faststart',
-  endCard,
-])
-
-run('ffmpeg', [
-  '-y',
-  '-hide_banner',
-  '-loglevel',
-  'warning',
-  '-i',
-  storyVideo,
-  '-i',
-  endCard,
-  '-filter_complex',
-  '[0:v]setpts=PTS-STARTPTS[v0];[0:a]asetpts=PTS-STARTPTS[a0];[1:v]setpts=PTS-STARTPTS[v1];[1:a]asetpts=PTS-STARTPTS[a1];[v0][a0][v1][a1]concat=n=2:v=1:a=1[vcat][a];[vcat]fps=24,format=yuv420p[v]',
-  '-map',
-  '[v]',
-  '-map',
-  '[a]',
-  '-c:v',
-  'libx264',
-  '-crf',
-  '22',
-  '-c:a',
-  'aac',
-  '-b:a',
-  '128k',
-  '-movflags',
-  '+faststart',
-  finalVideo,
-])
-
-run('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'warning', '-ss', '26', '-i', finalVideo, '-frames:v', '1', '-update', '1', poster])
-run('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'warning', '-i', finalVideo, '-vf', 'fps=1,scale=270:-1,tile=5x6', '-frames:v', '1', '-update', '1', contactSheet])
-
-console.log(`Rendered ${finalVideo}`)
-console.log(`Rendered ${poster}`)
-console.log(`Rendered ${qr}`)
-console.log(`Rendered ${captions}`)
-console.log(`Rendered ${contactSheet}`)
+run('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'warning', '-ss', String(totalDuration - 1), '-i', finalVideo, '-frames:v', '1', '-update', '1', poster])
+run('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'warning', '-i', finalVideo, '-vf', `fps=1/2,scale=180:-1,tile=5x${Math.ceil(totalDuration / 10)}`, '-frames:v', '1', '-update', '1', contactSheet])
+console.log(`Rendered ${totalDuration.toFixed(2)} seconds with continuous narration and ${endDuration.toFixed(2)} seconds of repository end-card.`)

@@ -13,7 +13,7 @@ server. Visitors get a useful page instead of a dead end.
 
 [![404 Missing UGC PSA concept](https://raw.githubusercontent.com/dilrajahdan/404-missing/main/docs/assets/ugc/404-missing-ugc-psa-poster.jpg)](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/ugc/404-missing-ugc-psa.mp4)
 
-[Watch the 30-second UGC PSA concept](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/ugc/404-missing-ugc-psa.mp4)
+[Watch the narrated UGC PSA concept](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/ugc/404-missing-ugc-psa.mp4)
 
 **Turn dead links into lifelines.**
 
