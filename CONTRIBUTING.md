@@ -7,4 +7,11 @@
 4. Check the actual 404 in a browser at 390 and 1440 pixels: country selection, photo, official link and home link. Inspect screenshots. Exercise no-JavaScript and unavailable-provider states. Keep the HTTP status 404.
 5. Open a focused pull request describing the problem, resulting behaviour and verification. Avoid real names in test evidence.
 
+Useful contribution docs:
+
+- [API access](docs/api-access.md)
+- [Provider roadmap](docs/roadmap.md)
+- [Style guide](docs/style-guide.md)
+- [PR strategy](docs/pr-strategy.md)
+
 The first release supports English UI, country selection and US region preference within a bounded recent snapshot. Full translated UI, local partner feeds, regional upstream pagination and additional framework packages need verified requirements and tests, not placeholder connectors.

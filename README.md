@@ -243,6 +243,10 @@ appeal and the photo loads through `/api/missing-children/photo/...`.
 - [Quick start](docs/quick-start.md): exact copy-paste setup.
 - [Simple patterns](docs/patterns.md): React, Vue, Ember, Astro and HTML.
 - [Frameworks](docs/frameworks.md): Nuxt, Next.js, Ember, Astro and HTML.
+- [API access](docs/api-access.md): provider links, access steps and outreach template.
+- [Provider roadmap](docs/roadmap.md): countries, help wanted and readiness levels.
+- [Style guide](docs/style-guide.md): product writing, visual style and code rules.
+- [PR strategy](docs/pr-strategy.md): contribution types, review order and release rules.
 - [Architecture](docs/architecture.md): request flow, token storage and extension
   points.
 - [MCP](docs/mcp.md): local assistant setup and tool contract.

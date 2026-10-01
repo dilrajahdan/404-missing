@@ -29,3 +29,9 @@ NotFound.org's UK example displayed a UK appeal during this check. That verifies
 For a custom styled UK card and location-aware JSON, approach Missing People / Missing Children Europe for a public-appeals distribution partnership. Ask for: website/domain approval, children-only eligibility including long-term cases, allowed fields and photography use, country/region taxonomy, update and withdrawal signals, permitted caching, rate limits, attribution and official reporting links. Do not use safeguarding briefings as a public feed; the partnership page describes those as confidential.
 
 No emails were sent, terms accepted or accounts registered as part of this research. UK inline case data remains dependent on partner access or a registered, verified embed. The official UK appeals link is usable immediately.
+
+## Access and outreach
+
+See [API access](api-access.md) for provider links, application steps and a
+copy-paste email template. See [Provider roadmap](roadmap.md) for country
+research priorities and help wanted.
