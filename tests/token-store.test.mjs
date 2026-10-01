@@ -53,3 +53,12 @@ test('provider token cooldown survives a process restart without another authent
     assert.ok((await options.tokenStore.read()).retryAfter>Date.now()+5*3600*1000)
   }finally{await rm(dir,{recursive:true,force:true})}
 })
+
+
+test('Netlify refuses to replace an existing lock without a conditional-write ETag', async () => {
+  const {createNetlifyTokenStore}=await import('../dist/netlify.js')
+  let writes=0,operations=0
+  const store={async get(){return null},async getWithMetadata(){return {data:{until:0}}},async setJSON(){writes++;return {modified:true,etag:'test'}}}
+  await assert.rejects(createNetlifyTokenStore(store).withLock(async()=>{operations++}),/metadata unavailable/)
+  assert.equal(writes,0);assert.equal(operations,0)
+})
