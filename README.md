@@ -11,6 +11,12 @@ server. Visitors get a useful page instead of a dead end.
 
 [Watch the 13-second narrated product video](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/404-missing-product-demo.mp4)
 
+[![404 Missing UGC PSA concept](https://raw.githubusercontent.com/dilrajahdan/404-missing/main/docs/assets/ugc/404-missing-ugc-psa-poster.jpg)](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/ugc/404-missing-ugc-psa.mp4)
+
+[Watch the 30-second UGC PSA concept](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/ugc/404-missing-ugc-psa.mp4)
+
+**Turn dead links into lifelines.**
+
 ```mermaid
 flowchart LR
   A[Visitor opens a missing page] --> B[Your 404 page]
