@@ -1,10 +1,49 @@
 WEBVTT
 
-00:00.000 --> 00:03.700
-404 Missing turns a dead link into a moment that could help.
+00:00:00.000 --> 00:00:02.961
+Here's how to add 404 Missing to your website.
 
-00:03.700 --> 00:07.600
-Add one small server route, drop the widget into any 404 page,
+00:00:03.402 --> 00:00:08.162
+Start with Node twenty-two or later, then install the release linked in the README.
 
-00:07.600 --> 00:00:13.282
-and show an official local appeal without exposing provider keys.
+00:00:08.603 --> 00:00:15.000
+For United States appeals, request your own NCMEC access using the API access guide.
+
+00:00:15.667 --> 00:00:19.011
+Next, add the missing children API route to your server.
+
+00:00:19.336 --> 00:00:21.437
+Copy the configuration from the README.
+
+00:00:21.762 --> 00:00:27.300
+Keep your provider credentials in server-only environment variables, and use a private token store.
+
+00:00:27.741 --> 00:00:30.760
+Never put those keys in your page or browser bundle.
+
+00:00:31.433 --> 00:00:33.476
+Now open the guide for your framework.
+
+00:00:33.918 --> 00:00:35.717
+React and Vue have adapters.
+
+00:00:36.158 --> 00:00:40.013
+Astro, Ember, and plain HTML use the web component.
+
+00:00:40.396 --> 00:00:46.038
+Add it to your existing 404 page, point it at your API route, and choose a country.
+
+00:00:46.480 --> 00:00:48.244
+Keep your home link visible.
+
+00:00:48.900 --> 00:00:51.605
+Finally, visit a URL that doesn't exist.
+
+00:00:51.988 --> 00:00:57.967
+Check that it still returns HTTP 404 and that the official appeal or directory link works.
+
+00:00:58.409 --> 00:01:03.436
+The UK currently uses an official directory link while partner feed access is arranged.
+
+00:01:03.819 --> 00:01:07.476
+Copy the exact steps from the README, and you're ready to start.

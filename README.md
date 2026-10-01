@@ -7,15 +7,22 @@ appeal on a website's 404 page. It gives developers a simple API route, a web
 component, framework adapters and an MCP helper. Provider keys stay on your
 server. Visitors get a useful page instead of a dead end.
 
-[![404 Missing product demo](https://raw.githubusercontent.com/dilrajahdan/404-missing/main/docs/assets/404-missing-product-demo.gif)](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/404-missing-product-demo.mp4)
+**1. How to use it: 68-second narrated setup guide**
 
-[Watch the 13-second narrated product video](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/404-missing-product-demo.mp4)
+[![How to use 404 Missing. Click to watch with narration](https://raw.githubusercontent.com/dilrajahdan/404-missing/main/docs/assets/404-missing-product-demo-poster.png)](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/404-missing-product-demo.mp4?v=narrated-setup-20261001)
 
-[![404 Missing UGC PSA concept](https://raw.githubusercontent.com/dilrajahdan/404-missing/main/docs/assets/ugc/404-missing-ugc-psa-poster.jpg)](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/ugc/404-missing-ugc-psa.mp4)
+[▶ Watch with sound: how to use 404 Missing](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/404-missing-product-demo.mp4?v=narrated-setup-20261001)
 
-[Watch the narrated UGC PSA concept](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/ugc/404-missing-ugc-psa.mp4)
+**2. Project ad: 32 seconds, narrated**
+
+[![404 Missing UGC PSA concept](https://raw.githubusercontent.com/dilrajahdan/404-missing/main/docs/assets/ugc/404-missing-ugc-psa-poster.jpg)](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/ugc/404-missing-ugc-psa.mp4?v=9b53071)
+
+[▶ Watch with sound: the 32-second “Turn dead links into lifelines” ad](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/ugc/404-missing-ugc-psa.mp4?v=9b53071)
 
 **Turn dead links into lifelines.**
+
+The images above are previews. Open either MP4 to hear the narration.
+[Setup transcript and captions](docs/assets/404-missing-product-demo.vtt).
 
 ```mermaid
 flowchart LR
