@@ -11,7 +11,7 @@ test('MCP client initializes, discovers tools and requests a Nuxt integration', 
     const info=await client.callTool({name:'list_providers',arguments:{}});assert.match(info.content[0].text,/partner-required/)
     const guide=await client.callTool({name:'integration_guide',arguments:{framework:'nuxt',country:'GB'}});assert.match(guide.content[0].text,/@dappa\/404-missing\/vue/)
     assert.match(guide.content[0].text,/private durable token store/)
-    for (const framework of ['astro','html']) {
+    for (const framework of ['astro','ember','html']) {
       const us=await client.callTool({name:'integration_guide',arguments:{framework,country:'US'}})
       assert.match(us.content[0].text,/href="https:\/\/www\.missingkids\.org\/gethelpnow\/search"/)
       assert.doesNotMatch(us.content[0].text,/href="https:\/\/www\.missingpeople\.org\.uk/)

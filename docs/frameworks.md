@@ -6,9 +6,8 @@ Use the same mental model in every framework:
 flowchart LR
   A[404 view] --> B[Widget or adapter]
   B --> C[Same-origin API route]
-  C --> D[createFetchHandler]
-  D --> E[createMissingService]
-  E --> F[Provider adapters]
+  C --> D[createMissing404Handler]
+  D --> E[Provider adapters]
 ```
 
 ## Nuxt 3 Or 4
@@ -19,21 +18,21 @@ flowchart LR
 1. Create `server/utils/missing-404.ts`:
 
    ```ts
-   import { createFetchHandler, createMissingService, createNcmecProvider } from '@dappa/404-missing/server'
+   import { createMissing404Handler } from '@dappa/404-missing/server'
    import { createFileTokenStore } from '@dappa/404-missing/node'
    import { resolve } from 'node:path'
 
-   let handler: ReturnType<typeof createFetchHandler> | undefined
+   let handler: ReturnType<typeof createMissing404Handler> | undefined
 
    export function missingHandler() {
-     return handler ??= createFetchHandler(createMissingService({
+     return handler ??= createMissing404Handler({
        defaultCountry: 'GB',
-       providers: [createNcmecProvider({
+       ncmec: {
          clientId: process.env.NUXT_NCMEC_CLIENT_ID || process.env.NCMEC_CLIENT_ID || '',
          clientSecret: process.env.NUXT_NCMEC_CLIENT_SECRET || process.env.NCMEC_CLIENT_SECRET || '',
          tokenStore: createFileTokenStore(resolve('.data/private-404/ncmec-token.json')),
-       })],
-     }))
+       },
+     })
    }
    ```
 
@@ -79,17 +78,17 @@ flowchart LR
 
    ```ts
    import 'server-only'
-   import { createFetchHandler, createMissingService, createNcmecProvider } from '@dappa/404-missing/server'
+   import { createMissing404Handler } from '@dappa/404-missing/server'
    import { createFileTokenStore } from '@dappa/404-missing/node'
 
-   export const missingHandler = createFetchHandler(createMissingService({
+   export const missingHandler = createMissing404Handler({
      defaultCountry: 'GB',
-     providers: [createNcmecProvider({
+     ncmec: {
        clientId: process.env.NCMEC_CLIENT_ID || '',
        clientSecret: process.env.NCMEC_CLIENT_SECRET || '',
        tokenStore: createFileTokenStore('/var/lib/your-app/private/404-missing-ncmec-token.json'),
-     })],
-   }))
+     },
+   })
    ```
 
 2. Create `app/api/missing-children/[...path]/route.ts`:
@@ -172,3 +171,34 @@ flowchart LR
    open the missing page, then open DevTools Network. Passing result:
    `/api/missing-children/appeal` returns `200` with `no-store`, and the page
    response itself remains `404`.
+
+## Ember
+
+0. Prerequisites:
+   Ember, a not-found route or template, and a same-origin API route mounted at
+   `/api/missing-children`.
+
+1. Register the web component once:
+
+   ```js
+   import { registerMissingChild } from '@dappa/404-missing/widget'
+
+   registerMissingChild()
+   ```
+
+2. Render the custom element in the not-found template:
+
+   ```hbs
+   <main>
+     <h1>Page not found</h1>
+     <a href="/">Back home</a>
+     <missing-child country="GB" endpoint="/api/missing-children">
+       <a href="https://www.missingpeople.org.uk/appeal-search">Official UK appeals</a>
+     </missing-child>
+   </main>
+   ```
+
+3. Check:
+   open the real Ember not-found route. Passing result: the card loads from the
+   same-origin API and the official fallback remains visible if no inline appeal
+   is available.

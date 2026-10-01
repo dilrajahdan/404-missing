@@ -41,17 +41,17 @@ flowchart LR
 3. Create a same-origin API route:
 
    ```ts
-   import { createFetchHandler, createMissingService, createNcmecProvider } from '@dappa/404-missing/server'
+   import { createMissing404Handler } from '@dappa/404-missing/server'
    import { createFileTokenStore } from '@dappa/404-missing/node'
 
-   export const missingChildrenHandler = createFetchHandler(createMissingService({
+   export const missingChildrenHandler = createMissing404Handler({
      defaultCountry: 'GB',
-     providers: [createNcmecProvider({
+     ncmec: {
        clientId: process.env.NCMEC_CLIENT_ID || '',
        clientSecret: process.env.NCMEC_CLIENT_SECRET || '',
        tokenStore: createFileTokenStore('/var/lib/your-app/private/404-missing-ncmec-token.json'),
-     })],
-   }))
+     },
+   })
    ```
 
 4. Render the widget on your 404 page:
@@ -70,17 +70,18 @@ flowchart LR
    HTTP 404, the home link is visible, the card loads, the official directory is
    available and provider photos only load through your same-origin API.
 
-Need the exact Nuxt, Next, Astro or plain HTML version? Start here:
-[docs/quick-start.md](docs/quick-start.md).
+Need the exact React, Vue, Ember, Astro or plain HTML version? Start here:
+[docs/patterns.md](docs/patterns.md).
 
 ## Choose Your Integration
 
 | If you use | Use this | Start here |
 | --- | --- | --- |
-| Nuxt 3 or 4 | Vue component plus H3 route | [Framework guide](docs/frameworks.md#nuxt-3-or-4) |
-| Next.js | React adapter plus route handler | [Framework guide](docs/frameworks.md#nextjs) |
-| Astro | Web component plus SSR endpoint | [Framework guide](docs/frameworks.md#astro) |
-| Any HTML page | Web component plus Fetch route | [Framework guide](docs/frameworks.md#html-or-any-framework) |
+| React or Next.js | React adapter plus one API route | [Simple patterns](docs/patterns.md#react-or-nextjs) |
+| Vue or Nuxt | Vue adapter plus one API route | [Simple patterns](docs/patterns.md#vue-or-nuxt) |
+| Ember | Web component plus one API route | [Simple patterns](docs/patterns.md#ember) |
+| Astro | Web component plus one endpoint | [Simple patterns](docs/patterns.md#astro) |
+| Any HTML page | Web component plus Fetch route | [Simple patterns](docs/patterns.md#html-or-any-framework) |
 | Agents or IDE assistants | Local MCP server | [MCP guide](docs/mcp.md) |
 
 ## What Developers Get
@@ -113,7 +114,7 @@ flowchart TB
 ```
 
 - `@dappa/404-missing/server`: provider interface, NCMEC provider, service and
-  Fetch handler.
+  Fetch handler, plus `createMissing404Handler` for the common config path.
 - `@dappa/404-missing/widget`: the framework-neutral custom element.
 - `@dappa/404-missing/vue`: a small Vue wrapper for Nuxt.
 - `@dappa/404-missing/react`: an SSR-safe React wrapper for Next.js.
@@ -236,7 +237,8 @@ appeal and the photo loads through `/api/missing-children/photo/...`.
 ## Deeper Pages
 
 - [Quick start](docs/quick-start.md): exact copy-paste setup.
-- [Frameworks](docs/frameworks.md): Nuxt, Next.js, Astro and HTML.
+- [Simple patterns](docs/patterns.md): React, Vue, Ember, Astro and HTML.
+- [Frameworks](docs/frameworks.md): Nuxt, Next.js, Ember, Astro and HTML.
 - [Architecture](docs/architecture.md): request flow, token storage and extension
   points.
 - [MCP](docs/mcp.md): local assistant setup and tool contract.

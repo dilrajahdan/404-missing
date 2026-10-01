@@ -32,7 +32,7 @@ without asking for credentials or returning case records.
 | Tool | Inputs | Returns |
 | --- | --- | --- |
 | `list_providers` | none | Supported and researched providers, countries, access requirements and official links. |
-| `integration_guide` | `framework`: `nuxt`, `next`, `astro` or `html`; `country`: `GB` or `US` | A concise integration guide for that framework and country. |
+| `integration_guide` | `framework`: `nuxt`, `next`, `astro`, `ember` or `html`; `country`: `GB` or `US` | A concise integration guide for that framework and country. |
 
 ## Safety Contract
 

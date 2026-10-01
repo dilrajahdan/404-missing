@@ -160,6 +160,42 @@ export function createNcmecProvider(options: { clientId: string; clientSecret: s
   }
 }
 
+export type NcmecPresetOptions = {
+  clientId?: string | null
+  clientSecret?: string | null
+  tokenStore?: TokenStore
+  fetch?: typeof fetch
+  now?: () => number
+  ttlMs?: number
+  timeoutMs?: number
+}
+
+export type Missing404HandlerOptions = {
+  defaultCountry?: string
+  basePath?: string
+  providers?: Provider[]
+  ncmec?: NcmecPresetOptions
+  now?: () => number
+  random?: () => number
+}
+
+export function createMissing404Handler(options: Missing404HandlerOptions = {}) {
+  const providers = [...(options.providers ?? [])]
+  if (options.ncmec) {
+    providers.push(createNcmecProvider({
+      ...options.ncmec,
+      clientId: options.ncmec.clientId ?? '',
+      clientSecret: options.ncmec.clientSecret ?? '',
+    }))
+  }
+  return createFetchHandler(createMissingService({
+    providers,
+    defaultCountry: options.defaultCountry,
+    now: options.now,
+    random: options.random,
+  }), options.basePath)
+}
+
 export function createMissingService(options: { providers?: Provider[]; defaultCountry?: string; now?: () => number; random?: () => number }) {
   const providers = options.providers ?? []
   const now = options.now ?? Date.now

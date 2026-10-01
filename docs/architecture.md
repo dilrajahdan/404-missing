@@ -4,6 +4,11 @@
 and the decision about which countries to support. The package provides the
 boring, repeatable pieces.
 
+The normal integration path is `createMissing404Handler(config)`. It creates the
+service, provider wiring and Fetch handler from one small config object. The
+lower-level `createNcmecProvider`, `createMissingService` and
+`createFetchHandler` functions remain available for custom provider work.
+
 ## Request Flow
 
 ```mermaid
@@ -42,7 +47,7 @@ flowchart TB
     C[React wrapper]
   end
   subgraph Your Server
-    D[Fetch handler]
+    D[createMissing404Handler]
     E[Missing service]
     F[Provider adapters]
     G[Private token store]

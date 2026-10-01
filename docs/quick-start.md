@@ -49,20 +49,20 @@ sequenceDiagram
 4. Create the server handler:
 
    ```ts
-   import { createFetchHandler, createMissingService, createNcmecProvider } from '@dappa/404-missing/server'
+   import { createMissing404Handler } from '@dappa/404-missing/server'
    import { createFileTokenStore } from '@dappa/404-missing/node'
 
-   let handler: ReturnType<typeof createFetchHandler> | undefined
+   let handler: ReturnType<typeof createMissing404Handler> | undefined
 
    export function missingChildrenHandler() {
-     return handler ??= createFetchHandler(createMissingService({
+     return handler ??= createMissing404Handler({
        defaultCountry: 'GB',
-       providers: [createNcmecProvider({
+       ncmec: {
          clientId: process.env.NCMEC_CLIENT_ID || '',
          clientSecret: process.env.NCMEC_CLIENT_SECRET || '',
          tokenStore: createFileTokenStore('.data/private-404/ncmec-token.json'),
-       })],
-     }))
+       },
+     })
    }
    ```
 

@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { createNcmecProvider, createMissingService, createFetchHandler, normalizeNcmec } from '../dist/server.js'
+import { createNcmecProvider, createMissingService, createFetchHandler, createMissing404Handler, normalizeNcmec } from '../dist/server.js'
 import { countryCode } from '../dist/index.js'
 
 // Synthetic records test failure handling without retaining a child's case data.
@@ -79,6 +79,31 @@ test('wire API has no-store, noindex, validated queries and method restrictions'
   assert.equal((await h.handler(new Request('https://test.local/api/missing-children/appeal?country=garbage'))).status,400)
   assert.equal((await h.handler(new Request('https://test.local/api/missing-children/appeal',{method:'POST'}))).status,405)
   const head=await h.handler(new Request('https://test.local/api/missing-children/appeal?country=US',{method:'HEAD'}));assert.equal(await head.text(),'')
+})
+test('preset handler turns common setup into one config object', async () => {
+  let auths = 0
+  const now = () => Date.parse('2026-09-30T12:00:00Z')
+  const handler = createMissing404Handler({
+    defaultCountry: 'US',
+    ncmec: {
+      clientId: 'test-id',
+      clientSecret: 'test-secret',
+      fetch: async url => {
+        if (String(url).endsWith('/Auth/Token')) { auths++; return Response.json({ accessToken: 'synthetic-bearer', expiresIn: 3600 }) }
+        return Response.json({ posters: [poster()] })
+      },
+      now,
+    },
+    now,
+    random: () => 0,
+  })
+  const response = await handler(new Request('https://test.local/api/missing-children/appeal'))
+  const data = await response.json()
+  assert.equal(response.status, 200)
+  assert.equal(data.status, 'ok')
+  assert.equal(data.country, 'US')
+  assert.equal(data.appeal.provider, 'ncmec')
+  assert.equal(auths, 1)
 })
 test('unconfigured provider produces an explicit usable fallback', async () => { const h=harness({clientSecret:''});const result=await h.service.getAppeal({country:'US'});assert.equal(result.status,'unavailable');assert.ok(result.fallback.url.startsWith('https://'));assert.equal(h.requests.length,0) })
 test('deployment whitespace in credentials is removed before authentication', async () => { const h=harness({clientId:' test-id\n',clientSecret:'test-secret\r\n'});await h.service.getAppeal({country:'US'});assert.deepEqual(JSON.parse(h.requests[0].init.body),{clientId:'test-id',clientSecret:'test-secret'}) })
