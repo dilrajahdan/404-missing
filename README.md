@@ -7,6 +7,10 @@ appeal on a website's 404 page. It gives developers a simple API route, a web
 component, framework adapters and an MCP helper. Provider keys stay on your
 server. Visitors get a useful page instead of a dead end.
 
+[![404 Missing product demo](https://raw.githubusercontent.com/dilrajahdan/404-missing/main/docs/assets/404-missing-product-demo.gif)](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/404-missing-product-demo.mp4)
+
+[Watch the 12-second product video](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/404-missing-product-demo.mp4)
+
 ```mermaid
 flowchart LR
   A[Visitor opens a missing page] --> B[Your 404 page]
