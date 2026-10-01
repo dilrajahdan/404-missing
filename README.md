@@ -2,6 +2,8 @@
 
 Turn a dead link into a chance to help.
 
+**[Visit the website and watch both narrated videos →](https://dilrajahdan.github.io/404-missing/)**
+
 404 Missing is a tiny, self-hosted toolkit for showing a current missing-child
 appeal on a website's 404 page. It gives developers a simple API route, a web
 component, framework adapters and an MCP helper. Provider keys stay on your
