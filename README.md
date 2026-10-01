@@ -9,7 +9,7 @@ server. Visitors get a useful page instead of a dead end.
 
 [![404 Missing product demo](https://raw.githubusercontent.com/dilrajahdan/404-missing/main/docs/assets/404-missing-product-demo.gif)](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/404-missing-product-demo.mp4)
 
-[Watch the 12-second product video](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/404-missing-product-demo.mp4)
+[Watch the 13-second narrated product video](https://github.com/dilrajahdan/404-missing/raw/main/docs/assets/404-missing-product-demo.mp4)
 
 ```mermaid
 flowchart LR
