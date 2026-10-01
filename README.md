@@ -1,7 +1,5 @@
 # 404 Missing
 
-Pre-release: pilot verification is in progress. The release archive below will be published after both pilot sites pass the live appeal and photo checks.
-
 Give a missing page a useful purpose: show a current missing-child appeal and link visitors to the official organisation.
 
 Small, self-hosted and framework friendly. A Fetch API handler, a web component, Vue and React adapters, and a local MCP server for integration assistance. No shared API keys, database, visitor accounts or tracking.
