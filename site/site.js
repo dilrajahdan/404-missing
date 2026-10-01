@@ -8,7 +8,8 @@ for (const video of videos) {
     if (video.nextElementSibling?.classList.contains('video-error')) return
     const message = document.createElement('p')
     message.className = 'video-error'
-    message.textContent = 'Video unavailable here. Use the “Open video” link below to play or download it.'
+    message.textContent =
+      'Video unavailable here. Use the “Open video” link below to play or download it.'
     video.after(message)
   })
 }

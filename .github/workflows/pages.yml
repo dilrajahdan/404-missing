@@ -2,7 +2,14 @@ name: Deploy promotional site
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'docs/assets/**', 'scripts/build-site.mjs', 'scripts/verify-site.py', '.github/workflows/pages.yml']
+    paths:
+      [
+        'site/**',
+        'docs/assets/**',
+        'scripts/build-site.mjs',
+        'scripts/verify-site.py',
+        '.github/workflows/pages.yml',
+      ]
   workflow_dispatch:
 permissions:
   contents: read
