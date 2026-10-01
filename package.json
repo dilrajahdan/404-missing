@@ -17,7 +17,11 @@
     "README.md",
     "LICENSE",
     "SECURITY.md",
-    "docs/providers.md"
+    "docs/architecture.md",
+    "docs/frameworks.md",
+    "docs/mcp.md",
+    "docs/providers.md",
+    "docs/quick-start.md"
   ],
   "exports": {
     ".": {
